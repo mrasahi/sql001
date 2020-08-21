@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME PAGE</title>
+</head>
+
+<body>
+
+    <h1>TO DO LIST</h1>
+
+    <form role="form">
+        <div class="form-group">
+            <label for="text">Text</label>
+            <input type="text" class="form-control" id="title-text">
+        </div>
+        <div class="form-group">
+            <label for="isDone">isDone</label>
+            <input type="text" class="form-control" id="isDone">
+        </div>
+        <button type="submit" class="btn btn-primary submit">Submit</button>
+    </form>
+
+    <hr>
+
+
+    <h1>
+        <button id="display-items">DISPLAY</button>
+        <div id="display">
+            <!-- Stuff goes here -->
+        </div>
+    </h1>
+
+    <!-- jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        $('#display').on('click', function (event) {
+            event.preventDefault
+            $.get('/api/items', item, function (data) {
+                $('#display').text(data)
+            })
+        })
+
+
+        $(".submit").on("click", function (event) {
+            event.preventDefault();
+
+            // Here we grab the form elements
+            var item = {
+                text: $("#title-text").val().trim(),
+                isDone: $("#isDone").val().trim(),
+            };
+
+            console.log(item);
+
+            // This line is the magic. It"s very similar to the standard ajax function we used.
+            // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
+            // The callback is the response of the server. In our case, we set up code in api-routes that "returns" true or false
+            // depending on if a tables is available or not.
+
+            $.post("/api/items", item,
+                function (data) {
+
+                    // Clear the form when submitting
+                    $("#title-text").val("");
+                    $("#isDone").val("");
+
+                });
+
+        });
+
+    </script>
+</body>
+
+</html>
